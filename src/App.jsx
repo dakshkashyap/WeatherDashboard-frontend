@@ -1,6 +1,6 @@
-import "./App.css";
+import "./App.scss";
 import axios from "axios";
-
+import cloud1 from "./images/cloud1.svg";
 /* ------------------------------ TODO API call ----------------------------- */
 /*
  * 1. async function that gets data from our express server
@@ -17,7 +17,8 @@ import axios from "axios";
 
 function App() {
   return (
-    <div>
+    <div className="weather weather--sunny">
+      <img src={cloud1} alt="cloud" />
       <h1>Weather</h1>
       <input type="text" id="cityInput" placeholder="Enter city name" />
       <button>Get Weather</button>
