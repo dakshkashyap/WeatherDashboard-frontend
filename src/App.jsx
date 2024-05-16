@@ -87,8 +87,16 @@ const App = () => {
 
   console.log("updated Weather by City:", weather.data);
 
+  const stormy = ["Clouds", "Rain", "Thunderstorm"];
+  const cloudy = stormy.some(str => str.includes(weather.data.weather));
+  console.log(cloudy);
+  
+
   return (
-    <div className="weather weather--sunny">
+    // <div className={`base-class ${condition ? 'conditional-class' : ''}`}>
+
+    // <div className="weather weather--sunny">
+    <div className={`weather ${cloudy ? 'weather--cloudy' : 'weather--sunny'}`}>
       <div className="App">
         <h1 className="app-name">Weather App</h1>
 
@@ -119,15 +127,8 @@ const App = () => {
         {/* Display weather data if available */}
 
         {weather.data.name && (
-          <div className="weather weather--sunny">
-            <h1>Weather</h1>
-            <input type="text" id="cityInput" placeholder="Enter city name" />
-            <button>Get Weather</button>
-            <div id="weatherData">
-              <h2>Vancouver</h2>
-              <img src="#" alt="icon" />
-              <h3>Weather type (Cloudy)</h3>
-              <h4>temp</h4>
+          <div>
+              
               <div>
                 <div className="city-name">
                   <h2>
@@ -151,7 +152,7 @@ const App = () => {
                   <p>Wind Speed: {weather.data.wind_speed}m/s</p>
                 </div>
               </div>
-            </div>
+            {/* </div> */}
           </div>
         )}
       </div>
