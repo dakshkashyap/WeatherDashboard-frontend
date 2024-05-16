@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import './App.scss';
+import React, { useState } from "react";
+import axios from "axios";
+import "./App.scss";
 
 const App = () => {
   // State hooks
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [weather, setWeather] = useState({
     loading: false,
     data: {},
@@ -14,43 +14,59 @@ const App = () => {
   // Function to format the date
   const toDateFunction = () => {
     const months = [
-      'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
-      'September', 'October', 'November', 'December'
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
     const weekDays = [
-      'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
     ];
     const currentDate = new Date();
-    const date = `${weekDays[currentDate.getDay()]} ${currentDate.getDate()} ${months[currentDate.getMonth()]}`;
+    const date = `${weekDays[currentDate.getDay()]} ${currentDate.getDate()} ${
+      months[currentDate.getMonth()]
+    }`;
     return date;
   };
 
   // Function to handle search
   const search = async (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       event.preventDefault();
-      setInput('');
       setWeather({ ...weather, loading: true });
 
-      const url = 'https://api.openweathermap.org/data/2.5/weather';
-      const apiKey = 'f00c38e0279b7bc85480c3fe775d518c';
+      const url = "http://localhost:8080";
 
       try {
         const response = await axios.get(url, {
           params: {
-            q: input,
-            units: 'metric',
-            appid: apiKey,
+            city: input,
           },
         });
         setWeather({ data: response.data, loading: false, error: false });
       } catch (error) {
         setWeather({ ...weather, data: {}, error: true });
-        setInput('');
-        console.log('error', error);
+        console.log("error", error);
       }
+      setInput("");
     }
   };
+
+  console.log("updated Weather by City:", weather.data);
 
   return (
     <div className="App">
@@ -74,18 +90,18 @@ const App = () => {
         <>
           <br />
           <br />
-          <span className="error-message" style={{ fontSize: '20px' }}>
+          <span className="error-message" style={{ fontSize: "20px" }}>
             City not found
           </span>
         </>
       )}
 
       {/* Display weather data if available */}
-      {weather.data && weather.data.main && (
+      {weather.data.name && (
         <div>
           <div className="city-name">
             <h2>
-              {weather.data.name}, <span>{weather.data.sys.country}</span>
+              {weather.data.name}, <span>{weather.data.country}</span>
             </h2>
           </div>
           <div className="date">
@@ -94,15 +110,15 @@ const App = () => {
           <div className="icon-temp">
             <img
               className=""
-              src={`https://openweathermap.org/img/wn/${weather.data.weather[0].icon}@2x.png`}
-              alt={weather.data.weather[0].description}
+              src={weather.data.icon_url}
+              alt={weather.data.weather_desc}
             />
-            {Math.round(weather.data.main.temp)}
+            {Math.round(weather.data.tempc)}
             <sup className="deg">°C</sup>
           </div>
           <div className="des-wind">
-            <p>{weather.data.weather[0].description.toUpperCase()}</p>
-            <p>Wind Speed: {weather.data.wind.speed}m/s</p>
+            <p>{weather.data.weather_desc}</p>
+            <p>Wind Speed: {weather.data.wind_speed}m/s</p>
           </div>
         </div>
       )}
