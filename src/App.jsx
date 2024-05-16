@@ -1,92 +1,62 @@
-import "./App.scss";
-import axios from "axios";
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faFrown } from '@fortawesome/free-solid-svg-icons';
-// import { Oval } from 'react-loader-spinner';
 import React, { useState } from 'react';
+import axios from 'axios';
+import './App.scss';
 
-/* ------------------------------ TODO API call ----------------------------- */
-/*
- * 1. async function that gets data from our express server
- * 2. Populate that data inside out weatherData div
- */
-
-/* ------------------------------ TODO Styling ------------------------------ */
-/*
- * 1. make bg color
- * 2. change bg based on weather type (ideally)
- * 3. style card
- * 4. add some weather animations
- */
-
-function App() {
-  const [input, setInput] = useState("");
+const App = () => {
+  // State hooks
+  const [input, setInput] = useState('');
   const [weather, setWeather] = useState({
     loading: false,
     data: {},
     error: false,
   });
 
+  // Function to format the date
   const toDateFunction = () => {
     const months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
+      'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
+      'September', 'October', 'November', 'December'
     ];
-    const WeekDays = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
+    const weekDays = [
+      'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
     ];
     const currentDate = new Date();
-    const date = `${WeekDays[currentDate.getDay()]} ${currentDate.getDate()} ${
-      months[currentDate.getMonth()]
-    }`;
+    const date = `${weekDays[currentDate.getDay()]} ${currentDate.getDate()} ${months[currentDate.getMonth()]}`;
     return date;
   };
 
+  // Function to handle search
   const search = async (event) => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       event.preventDefault();
-      setInput("");
+      setInput('');
       setWeather({ ...weather, loading: true });
-      const url = "https://api.openweathermap.org/data/2.5/weather";
-      const api_key = "f00c38e0279b7bc85480c3fe775d518c";
-      await axios
-        .get(url, {
+
+      const url = 'https://api.openweathermap.org/data/2.5/weather';
+      const apiKey = 'f00c38e0279b7bc85480c3fe775d518c';
+
+      try {
+        const response = await axios.get(url, {
           params: {
             q: input,
-            units: "metric",
-            appid: api_key,
+            units: 'metric',
+            appid: apiKey,
           },
-        })
-        .then((res) => {
-          console.log("res", res);
-          setWeather({ data: res.data, loading: false, error: false });
-        })
-        .catch((error) => {
-          setWeather({ ...weather, data: {}, error: true });
-          setInput("");
-          console.log("error", error);
         });
+        setWeather({ data: response.data, loading: false, error: false });
+      } catch (error) {
+        setWeather({ ...weather, data: {}, error: true });
+        setInput('');
+        console.log('error', error);
+      }
     }
   };
+
   return (
     <div className="App">
       <h1 className="app-name">Weather App</h1>
+
+      {/* Search bar */}
       <div className="search-bar">
         <input
           type="text"
@@ -98,24 +68,20 @@ function App() {
           onKeyPress={search}
         />
       </div>
-      {weather.loading && (
-        <>
-          <br />
-          <br />
-          {/* <Oval type="Oval" color="black" height={100} width={100} /> */}
-        </>
-      )}
+
+      {/* Display error message if city not found */}
       {weather.error && (
         <>
           <br />
           <br />
-          <span className="error-message">
-            {/* <FontAwesomeIcon icon={faFrown} /> */}
-            <span style={{ fontSize: "20px" }}>City not found</span>
+          <span className="error-message" style={{ fontSize: '20px' }}>
+            City not found
           </span>
         </>
       )}
-      {weather && weather.data && weather.data.main && (
+
+      {/* Display weather data if available */}
+      {weather.data && weather.data.main && (
         <div>
           <div className="city-name">
             <h2>
@@ -142,6 +108,6 @@ function App() {
       )}
     </div>
   );
-}
+};
 
 export default App;
