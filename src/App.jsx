@@ -1,6 +1,11 @@
 import "./App.scss";
 import axios from "axios";
 import cloud1 from "./images/cloud1.svg";
+import cloud2 from "./images/cloud2.svg";
+import cloud3 from "./images/cloud3.svg";
+import cloud4 from "./images/cloud4.svg";
+import cloud5 from "./images/cloud5.svg";
+import cloud6 from "./images/cloud6.svg";
 /* ------------------------------ TODO API call ----------------------------- */
 /*
  * 1. async function that gets data from our express server
@@ -18,7 +23,6 @@ import cloud1 from "./images/cloud1.svg";
 function App() {
   return (
     <div className="weather weather--sunny">
-      <img src={cloud1} alt="cloud" />
       <h1>Weather</h1>
       <input type="text" id="cityInput" placeholder="Enter city name" />
       <button>Get Weather</button>
@@ -30,6 +34,18 @@ function App() {
         <div>
           <p>temp min</p>
           <p>temp max</p>
+        </div>
+      </div>
+      <div className="clouds">
+        <div className="clouds-top">
+          <img src={cloud1} alt="cloud1" />
+        </div>
+        <div className="clouds-btm">
+          <img className="clouds-btm__cloud" src={cloud4} alt="cloud1" />
+          <div className="clouds-btm__wrap">
+            <img src={cloud3} alt="cloud3" />
+            <img src={cloud6} alt="cloud4" />
+          </div>
         </div>
       </div>
     </div>
