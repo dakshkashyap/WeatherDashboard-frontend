@@ -1,38 +1,113 @@
-import "./App.css";
-import axios from "axios";
+import React, { useState } from 'react';
+import axios from 'axios';
+import './App.scss';
 
-/* ------------------------------ TODO API call ----------------------------- */
-/*
- * 1. async function that gets data from our express server
- * 2. Populate that data inside out weatherData div
- */
+const App = () => {
+  // State hooks
+  const [input, setInput] = useState('');
+  const [weather, setWeather] = useState({
+    loading: false,
+    data: {},
+    error: false,
+  });
 
-/* ------------------------------ TODO Styling ------------------------------ */
-/*
- * 1. make bg color
- * 2. change bg based on weather type (ideally)
- * 3. style card
- * 4. add some weather animations
- */
+  // Function to format the date
+  const toDateFunction = () => {
+    const months = [
+      'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
+      'September', 'October', 'November', 'December'
+    ];
+    const weekDays = [
+      'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
+    ];
+    const currentDate = new Date();
+    const date = `${weekDays[currentDate.getDay()]} ${currentDate.getDate()} ${months[currentDate.getMonth()]}`;
+    return date;
+  };
 
-function App() {
+  // Function to handle search
+  const search = async (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      setInput('');
+      setWeather({ ...weather, loading: true });
+
+      const url = 'https://api.openweathermap.org/data/2.5/weather';
+      const apiKey = 'f00c38e0279b7bc85480c3fe775d518c';
+
+      try {
+        const response = await axios.get(url, {
+          params: {
+            q: input,
+            units: 'metric',
+            appid: apiKey,
+          },
+        });
+        setWeather({ data: response.data, loading: false, error: false });
+      } catch (error) {
+        setWeather({ ...weather, data: {}, error: true });
+        setInput('');
+        console.log('error', error);
+      }
+    }
+  };
+
   return (
-    <div>
-      <h1>Weather</h1>
-      <input type="text" id="cityInput" placeholder="Enter city name" />
-      <button>Get Weather</button>
-      <div id="weatherData">
-        <h2>Vancouver</h2>
-        <img src="#" alt="icon" />
-        <h3>Weather type (Cloudy)</h3>
-        <h4>temp</h4>
-        <div>
-          <p>temp min</p>
-          <p>temp max</p>
-        </div>
+    <div className="App">
+      <h1 className="app-name">Weather App</h1>
+
+      {/* Search bar */}
+      <div className="search-bar">
+        <input
+          type="text"
+          className="city-search"
+          placeholder="Enter City Name.."
+          name="query"
+          value={input}
+          onChange={(event) => setInput(event.target.value)}
+          onKeyPress={search}
+        />
       </div>
+
+      {/* Display error message if city not found */}
+      {weather.error && (
+        <>
+          <br />
+          <br />
+          <span className="error-message" style={{ fontSize: '20px' }}>
+            City not found
+          </span>
+        </>
+      )}
+
+      {/* Display weather data if available */}
+      {weather.data && weather.data.main && (
+        <div>
+          <div className="city-name">
+            <h2>
+              {weather.data.name}, <span>{weather.data.sys.country}</span>
+            </h2>
+          </div>
+          <div className="date">
+            <span>{toDateFunction()}</span>
+          </div>
+          <div className="icon-temp">
+            <img
+              className=""
+              src={`https://openweathermap.org/img/wn/${weather.data.weather[0].icon}@2x.png`}
+              alt={weather.data.weather[0].description}
+            />
+            {Math.round(weather.data.main.temp)}
+            <sup className="deg">°C</sup>
+          </div>
+          <div className="des-wind">
+            <p>{weather.data.weather[0].description.toUpperCase()}</p>
+            <p>Wind Speed: {weather.data.wind.speed}m/s</p>
+          </div>
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default App;
