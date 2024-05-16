@@ -88,72 +88,73 @@ const App = () => {
   console.log("updated Weather by City:", weather.data);
 
   return (
-    <div className="App">
-      <h1 className="app-name">Weather App</h1>
+    <div className="weather weather--sunny">
+      <div className="App">
+        <h1 className="app-name">Weather App</h1>
 
-      {/* Search bar */}
-      <div className="search-bar">
-        <input
-          type="text"
-          className="city-search"
-          placeholder="Enter City Name.."
-          name="query"
-          value={input}
-          onChange={(event) => setInput(event.target.value)}
-          onKeyPress={search}
-        />
-      </div>
+        {/* Search bar */}
+        <div className="search-bar">
+          <input
+            type="text"
+            className="city-search"
+            placeholder="Enter City Name.."
+            name="query"
+            value={input}
+            onChange={(event) => setInput(event.target.value)}
+            onKeyPress={search}
+          />
+        </div>
 
-      {/* Display error message if city not found */}
-      {weather.error && (
-        <>
-          <br />
-          <br />
-          <span className="error-message" style={{ fontSize: "20px" }}>
-            City not found
-          </span>
-        </>
-      )}
+        {/* Display error message if city not found */}
+        {weather.error && (
+          <>
+            <br />
+            <br />
+            <span className="error-message" style={{ fontSize: "20px" }}>
+              City not found
+            </span>
+          </>
+        )}
 
-      {/* Display weather data if available */}
+        {/* Display weather data if available */}
 
-      {weather.data.name && (
-        <div className="weather weather--sunny">
-          <h1>Weather</h1>
-          <input type="text" id="cityInput" placeholder="Enter city name" />
-          <button>Get Weather</button>
-          <div id="weatherData">
-            <h2>Vancouver</h2>
-            <img src="#" alt="icon" />
-            <h3>Weather type (Cloudy)</h3>
-            <h4>temp</h4>
-            <div>
-              <div className="city-name">
-                <h2>
-                  {weather.data.name}, <span>{weather.data.country}</span>
-                </h2>
-              </div>
-              <div className="date">
-                <span>{toDateFunction()}</span>
-              </div>
-              <div className="icon-temp">
-                <img
-                  className=""
-                  src={weather.data.icon_url}
-                  alt={weather.data.weather_desc}
-                />
-                {Math.round(weather.data.tempc)}
-                <sup className="deg">°C</sup>
-              </div>
-              <div className="des-wind">
-                <p>{weather.data.weather_desc}</p>
-                <p>Wind Speed: {weather.data.wind_speed}m/s</p>
+        {weather.data.name && (
+          <div className="weather weather--sunny">
+            <h1>Weather</h1>
+            <input type="text" id="cityInput" placeholder="Enter city name" />
+            <button>Get Weather</button>
+            <div id="weatherData">
+              <h2>Vancouver</h2>
+              <img src="#" alt="icon" />
+              <h3>Weather type (Cloudy)</h3>
+              <h4>temp</h4>
+              <div>
+                <div className="city-name">
+                  <h2>
+                    {weather.data.name}, <span>{weather.data.country}</span>
+                  </h2>
+                </div>
+                <div className="date">
+                  <span>{toDateFunction()}</span>
+                </div>
+                <div className="icon-temp">
+                  <img
+                    className=""
+                    src={weather.data.icon_url}
+                    alt={weather.data.weather_desc}
+                  />
+                  {Math.round(weather.data.tempc)}
+                  <sup className="deg">°C</sup>
+                </div>
+                <div className="des-wind">
+                  <p>{weather.data.weather_desc}</p>
+                  <p>Wind Speed: {weather.data.wind_speed}m/s</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
-
+        )}
+      </div>
       <div className="clouds">
         <div className="clouds-top">
           <img src={cloud1} alt="cloud1" />
